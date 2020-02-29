@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layour_elements.view.*
 
 
-class MyAdapter(val items : ArrayList<Int>, val context: Context) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(val items : ArrayList<Technology>, val context: Context) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return items.size
@@ -25,7 +25,7 @@ class MyAdapter(val items : ArrayList<Int>, val context: Context) : RecyclerView
     }
     // Прогрузка элементов в адаптере
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (items.get(position) % 2 == 1)
+        /*if (items.get(position) % 2 == 1)
         {
             holder?.number?.setBackgroundColor(Color.WHITE)
             holder.image.setImageResource(R.drawable.tears1)
@@ -34,14 +34,14 @@ class MyAdapter(val items : ArrayList<Int>, val context: Context) : RecyclerView
         {
             holder?.number?.setBackgroundColor(Color.LTGRAY)
             holder.image.setImageResource(R.drawable.tears2)
-        }
-        holder?.number?.text = intToString(items.get(position))
+        }*/
+        holder?.number?.text = items.get(position).name
     }
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         val number = view.item_textView
         var image = view.item_icon
     }
-
+    class Technology(val name: String, val graphic : String)
 
 
 
