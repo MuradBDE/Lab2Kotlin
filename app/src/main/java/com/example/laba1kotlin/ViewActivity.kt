@@ -1,29 +1,19 @@
 package com.example.laba1kotlin
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.beust.klaxon.JsonReader
 import com.beust.klaxon.Klaxon
-import org.json.JSONObject
+import kotlinx.android.synthetic.main.activity_view.*
 import java.io.StringReader
-import java.lang.Exception
-import java.net.URL
 
-class SecondActivity : AppCompatActivity(), MyAdapter.MyClickListener {
+class ViewActivity : AppCompatActivity() {
 
-    lateinit var recycleView: RecyclerView
+    val techList = arrayListOf<MyAdapter.Technology>()
+    val adapter = ViewPagerAdapter(this, techList)
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_second)
-        recycleView = findViewById(R.id.recyclerView)
-
-        var layoutManager = LinearLayoutManager(this)
-        recycleView.layoutManager = layoutManager;
-        recycleView.setHasFixedSize(true)
 
         class fu(val description : String, val format_version: String, val options : String)
         var flag = false
@@ -747,30 +737,28 @@ class SecondActivity : AppCompatActivity(), MyAdapter.MyClickListener {
 ]"""
 
         val klaxon = Klaxon()
-        val techList = arrayListOf<MyAdapter.Technology>()
 
-            JsonReader(StringReader(jsonString)).use { reader ->
-                reader.beginArray {
-                    while (reader.hasNext()) {
-                        if (flag)
-                        {
-                            val tech = klaxon.parse<MyAdapter.Technology>(reader)
-                            techList.add(tech!!)
-                        }
-                        else
-                        {
-                            val temp = klaxon.parse<fu>(reader)
-                            flag = true
-                        }
+        JsonReader(StringReader(jsonString)).use { reader ->
+            reader.beginArray {
+                while (reader.hasNext()) {
+                    if (flag)
+                    {
+                        val tech = klaxon.parse<MyAdapter.Technology>(reader)
+                        techList.add(tech!!)
+                    }
+                    else
+                    {
+                        val temp = klaxon.parse<fu>(reader)
+                        flag = true
                     }
                 }
             }
+        }
 
-        recycleView.adapter = MyAdapter(techList, this, this)
-    }
 
-    override fun onItemClick(item: MyAdapter.Technology, position: Int) {
-        val viewActivityIntent = Intent(this, ViewActivity::class.java)
-        startActivity(viewActivityIntent)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_view)
+
+        viewpager.adapter = adapter
     }
 }

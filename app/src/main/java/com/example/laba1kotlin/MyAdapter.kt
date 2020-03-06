@@ -1,18 +1,18 @@
 package com.example.laba1kotlin
 
 import android.content.Context
-import android.graphics.Color
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layour_elements.view.*
+import java.net.URL
+import android.graphics.drawable.Drawable
+import com.squareup.picasso.Picasso
+import java.io.InputStream
 
 
-class MyAdapter(val items : ArrayList<Technology>, val context: Context) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(val items : ArrayList<Technology>, val context: Context, var clickListener: MyClickListener) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return items.size
@@ -25,25 +25,30 @@ class MyAdapter(val items : ArrayList<Technology>, val context: Context) : Recyc
     }
     // Прогрузка элементов в адаптере
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        /*if (items.get(position) % 2 == 1)
-        {
-            holder?.number?.setBackgroundColor(Color.WHITE)
-            holder.image.setImageResource(R.drawable.tears1)
-        }
-        else
-        {
-            holder?.number?.setBackgroundColor(Color.LTGRAY)
-            holder.image.setImageResource(R.drawable.tears2)
-        }*/
-        holder?.number?.text = items.get(position).name
+        holder?.name?.text = items.get(position).name
+        var url = "https://raw.githubusercontent.com/wesleywerner/ancient-tech/02decf875616dd9692b31658d92e64a20d99f816/src/images/tech/" + items.get(position).graphic
+        Picasso.with(context).load(url).into(holder?.image)
+
+        holder.initialize(items.get(position), clickListener)
     }
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        val number = view.item_textView
+        val name = view.item_textView
+        var helpText = ""
         var image = view.item_icon
+
+        fun initialize(item: Technology, action: MyClickListener){
+            name.text = item.name
+            itemView.setOnClickListener {
+                action.onItemClick(item, adapterPosition)
+            }
+        }
     }
+
     class Technology(val name: String, val graphic : String)
 
-
+    interface MyClickListener{
+        fun onItemClick(item : Technology, position: Int)
+    }
 
     fun intToString(number: Int) : String
     {
