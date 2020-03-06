@@ -1,5 +1,6 @@
 package com.example.laba1kotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.PagerAdapter
@@ -11,10 +12,10 @@ import java.io.StringReader
 
 class ViewActivity : AppCompatActivity() {
 
+    var current = 0
     val techList = arrayListOf<MyAdapter.Technology>()
-    val adapter = ViewPagerAdapter(this, techList)
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        current = this.getIntent().getIntExtra("current", 0)
         class fu(val description : String, val format_version: String, val options : String)
         var flag = false
         val jsonString = """[
@@ -755,7 +756,7 @@ class ViewActivity : AppCompatActivity() {
             }
         }
 
-
+        val adapter = ViewPagerAdapter(this, techList, current)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
 

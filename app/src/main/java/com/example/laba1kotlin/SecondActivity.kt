@@ -3,15 +3,11 @@ package com.example.laba1kotlin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.JsonReader
 import com.beust.klaxon.Klaxon
-import org.json.JSONObject
 import java.io.StringReader
-import java.lang.Exception
-import java.net.URL
 
 class SecondActivity : AppCompatActivity(), MyAdapter.MyClickListener {
 
@@ -771,6 +767,7 @@ class SecondActivity : AppCompatActivity(), MyAdapter.MyClickListener {
 
     override fun onItemClick(item: MyAdapter.Technology, position: Int) {
         val viewActivityIntent = Intent(this, ViewActivity::class.java)
+        viewActivityIntent.putExtra("current", position)
         startActivity(viewActivityIntent)
     }
 }

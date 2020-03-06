@@ -13,16 +13,18 @@ import com.squareup.picasso.Picasso
 
 class ViewPagerAdapter : PagerAdapter {
 
+    var flag = true
     var context : Context
     var myItems : ArrayList<MyAdapter.Technology>
-    var firstPosition : Int = 0
+    var currentPosition : Int = 0
     lateinit var layoutInflater: LayoutInflater
 
-    constructor(context : Context, items : ArrayList<MyAdapter.Technology>) : super()
+    constructor(context : Context, items : ArrayList<MyAdapter.Technology>, current : Int) : super()
     {
         this.context = context
         this.myItems = items
-        
+        currentPosition = current
+
     }
     override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object` as LinearLayout
 
@@ -31,15 +33,16 @@ class ViewPagerAdapter : PagerAdapter {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        var firstPosition = currentPosition + position
     var image : ImageView
         var nameText : TextView
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var view : View = layoutInflater.inflate(R.layout.slider_layout, container, false)
         image = view.findViewById(R.id.techIV)
         nameText = view.findViewById(R.id.techNameTV)
-        var url = "https://raw.githubusercontent.com/wesleywerner/ancient-tech/02decf875616dd9692b31658d92e64a20d99f816/src/images/tech/" + myItems.get(position).graphic
+        var url = "https://raw.githubusercontent.com/wesleywerner/ancient-tech/02decf875616dd9692b31658d92e64a20d99f816/src/images/tech/" + myItems.get(firstPosition).graphic
         Picasso.with(context).load(url).into(image)
-        nameText.setText(myItems.get(position).name)
+        nameText.setText(myItems.get(firstPosition).name)
         container!!.addView(view)
         return view
     }
